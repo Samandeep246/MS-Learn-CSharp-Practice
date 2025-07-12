@@ -8,16 +8,198 @@ namespace part5Practice
         static void Main(string[] args)
         {
             {
-                Console.WriteLine("Generating random numbers:");
+                //Console.WriteLine("Generating random numbers:");
                 //DisplayRandomeNumbers();
                 // AdjustMedicineTime();
                 // validateIP();
                 //fortuneTeller();
                 //testScope();
-                genEmail();
-
+                //genEmail();
+                //calBill();
+                //convertCurrency();
+                // revString();
+                //game();
+                pettingZooProject();
             }
         }
+        static void pettingZooProject()
+        {
+           string[] pettingZoo = 
+            {
+                "alpacas", "capybaras", "chickens", "ducks", "emus", "geese", 
+                "goats", "iguanas", "kangaroos", "lemurs", "llamas", "macaws", 
+                "ostriches", "pigs", "ponies", "rabbits", "sheep", "tortoises",
+            };
+
+            PlanSchoolVisit("School A");
+            PlanSchoolVisit("School B", 3);
+            PlanSchoolVisit("School C", 2);
+
+            void PlanSchoolVisit(string schoolName, int groups = 6) 
+            {
+                RandomizeAnimals(); 
+                string[,] group = AssignGroup(groups);
+                Console.WriteLine(schoolName);
+                PrintGroup(group);
+            }
+
+            void RandomizeAnimals() 
+            {
+                Random random = new Random();
+
+                for (int i = 0; i < pettingZoo.Length; i++) 
+                {
+                    int r = random.Next(i, pettingZoo.Length);
+
+                    string temp = pettingZoo[r];
+                    pettingZoo[r] = pettingZoo[i];
+                    pettingZoo[i] = temp;
+                }
+            }
+
+            string[,] AssignGroup(int groups = 6) 
+            {
+                string[,] result = new string[groups, pettingZoo.Length/groups];
+                int start = 0;
+
+                for (int i = 0; i < groups; i++) 
+                {
+                    for (int j = 0; j < result.GetLength(1); j++) 
+                    {
+                        result[i,j] = pettingZoo[start++];
+                    }
+                }
+
+                return result;
+            }
+
+            void PrintGroup(string[,] groups) 
+            {
+                for (int i = 0; i < groups.GetLength(0); i++) 
+                {
+                    Console.Write($"Group {i + 1}: ");
+                    for (int j = 0; j < groups.GetLength(1); j++) 
+                    {
+                        Console.Write($"{groups[i,j]}  ");
+                    }
+                    Console.WriteLine();
+                }
+            }
+        }
+        static void game()
+        {
+            Random random = new Random();
+            Console.WriteLine("Would you like to play ? (Y/N)");
+            if (shouldPlay())
+                PlayGame();
+            bool shouldPlay()
+            {
+                string response = Console.ReadLine();
+                return response.ToLower().Equals("y");
+            }
+            void PlayGame()
+            {
+                var play = true;
+                while (play)
+                {
+                    var target = GetTarget();
+                    var roll = RollDice();
+                    Console.WriteLine($"Roll a number greater than {target} to win!");
+                    Console.WriteLine($"You rolled a {roll}");
+                    Console.WriteLine(winOrLose(roll, target));
+                    Console.WriteLine("\nPlay again? (Y/N)");
+                    play = shouldPlay();
+                }
+
+            }
+            int GetTarget()
+            {
+                return random.Next(1, 6);
+            }
+            int RollDice()
+            {
+                return random.Next(1, 7);
+            }
+            string winOrLose(int roll, int target)
+            {
+                if (roll > target)
+                    return "You win";
+                else
+                    return "You lose";
+            }
+
+        }
+        static void revString()
+            {
+                string result = "";
+                string input = "snake";
+                Console.WriteLine(input);
+                result = revWord(input);
+                Console.WriteLine(result);
+                input = "I love Gurpreet";
+                Console.WriteLine(input);
+                result = "";
+                string[] words = input.Split(" ");
+                foreach (string word in words)
+                    result += revWord(word) + " ";
+                Console.WriteLine(result);
+            }
+        static string revWord(string word)
+            {
+                string result = "";
+                for (int i = word.Length - 1; i >= 0; i--)
+                    result += word[i];
+                return result;
+            }
+        static void convertCurrency()
+        {
+            double usd = 23.73;
+            int vnd = UsdToVnd(usd);
+            Console.WriteLine($"${usd} USD =${vnd} VND");
+            int UsdToVnd(double usd)
+            {
+                int rate = 23500;
+                return (int)(rate * usd);
+            }
+        }
+
+        static void calBill()
+        {
+            double total = 0;
+            double minimumSpend = 30.00;
+
+            double[] items = { 5.97, 3.50, 12.25, 2.99, 10.98 };
+            double[] discounts = { 0.30, 0.00, 0.10, 0.20, 0.50 };
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                total += GetDiscountedPrice(i);
+                Console.WriteLine("in for loop at " + items[i] + " total " + total);
+            }
+
+            total -= TotalMeetsMinimum() ? 5.00 : 0.00;
+
+            Console.WriteLine($"Total: ${FormatDecimal(total)}");
+
+            double GetDiscountedPrice(int itemIndex)
+            {
+                Console.WriteLine("in get discountedprice " + items[itemIndex]);
+                return items[itemIndex] * (1 - discounts[itemIndex]);
+
+            }
+
+            bool TotalMeetsMinimum()
+            {
+                //Console.WriteLine("yes");
+                return total >= minimumSpend;
+            }
+
+            string FormatDecimal(double input)
+            {
+                return input.ToString().Substring(0, 5);
+            }
+        }
+
 
         static void genEmail()
         {
@@ -43,7 +225,7 @@ namespace part5Practice
 
                 string abbreviation = first.Substring(0, 2) + last;
 
-                Console.WriteLine(abbreviation+externalDomain);
+                Console.WriteLine(abbreviation + externalDomain);
             }
 
             for (int i = 0; i < external.GetLength(0); i++)
@@ -53,7 +235,7 @@ namespace part5Practice
 
                 string abbreviation = first.Substring(0, 2) + last;
 
-                Console.WriteLine(abbreviation+"contoso.com");
+                Console.WriteLine(abbreviation + "contoso.com");
             }
         }
 
